@@ -1,0 +1,119 @@
+﻿@using demo.ViewModels
+@model EmployeeSignatureViewModel
+@{
+    ViewData["Title"] = "Создание подписи";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Создание email подписи</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info mb-4">
+                        <h5>Ваши данные:</h5>
+                        <p><strong>ФИО:</strong> @Model.FullName</p>
+                        <p><strong>Email:</strong> @Model.Email</p>
+                    </div>
+
+                    @if (Model.IsSuccess || ViewBag.Success != null && ViewBag.Success == true)
+                    {
+                        <div class="alert alert-success">
+                            <h5>✅ Подпись создана!</h5>
+                            <p>Нажмите кнопку ниже, чтобы скачать HTML файл с вашей подписью.</p>
+
+                            <div class="text-center mt-3">
+                                <a href="/employee/download?token=@Model.Token" class="btn btn-success btn-lg">
+                                    <i class="bi bi-download"></i> Скачать подпись
+                                </a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <form id="signature-form" action="/employee/signature" method="post">
+                            <input type="hidden" name="__RequestVerificationToken"
+                                   value="@Html.AntiForgeryToken()" />
+
+                            <input type="hidden" name="Token" value="@Model.Token" />
+                            <input type="hidden" name="FullName" value="@Model.FullName" />
+                            <input type="hidden" name="Email" value="@Model.Email" />
+
+                            <div class="mb-3">
+                                <label for="Position" class="form-label">Должность *</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="Position"
+                                       name="Position"
+                                       placeholder="Введите вашу должность"
+                                       required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="InternalNumber" class="form-label">Внутренний номер</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="InternalNumber"
+                                       name="InternalNumber"
+                                       placeholder="Например: 123" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="Phone" class="form-label">Мобильный телефон</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="Phone"
+                                       name="Phone"
+                                       placeholder="Например: +7 (XXX) XXX-XX-XX" />
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-gear"></i> Создать подпись
+                                </button>
+                            </div>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('Phone')?.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 0) {
+                if (value.length <= 3) {
+                    e.target.value = '+7 (' + value;
+                } else if (value.length <= 6) {
+                    e.target.value = '+7 (' + value.substring(0, 3) + ') ' + value.substring(3);
+                } else if (value.length <= 8) {
+                    e.target.value = '+7 (' + value.substring(0, 3) + ') ' + value.substring(3, 6) + '-' + value.substring(6);
+                } else {
+                    e.target.value = '+7 (' + value.substring(0, 3) + ') ' + value.substring(3, 6) + '-' + value.substring(6, 8) + '-' + value.substring(8, 10);
+                }
+            }
+        });
+
+        document.getElementById('signature-form')?.addEventListener('submit', function(e) {
+            console.log('=== Форма отправляется ===');
+            console.log('Position:', document.getElementById('Position').value);
+            console.log('Phone:', document.getElementById('Phone').value);
+            console.log('InternalNumber:', document.getElementById('InternalNumber').value);
+            console.log('Token:', document.querySelector('[name="Token"]').value);
+
+            const position = document.getElementById('Position');
+            if (!position.value.trim()) {
+                e.preventDefault();
+                alert('Пожалуйста, заполните поле "Должность"');
+                position.focus();
+                return false;
+            }
+            return true;
+        });
+    </script>
+}

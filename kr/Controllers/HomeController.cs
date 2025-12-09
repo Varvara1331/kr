@@ -15,45 +15,60 @@ namespace demo.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string token)
+        [HttpGet]
+        public IActionResult Index(string token = null)
+        {
+            if (!string.IsNullOrEmpty(token))
+            {
+                return RedirectToAction("Welcome", new { token = token });
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Welcome(string token)
         {
             if (string.IsNullOrEmpty(token))
             {
-                return View();
+                return RedirectToAction("Index");
             }
 
-            var link = await _context.TemporaryLinks
-                .FirstOrDefaultAsync(l => l.Token == token);
+            var employee = await _context.TemporaryLinks
+                .FirstOrDefaultAsync(e => e.Token == token);
 
-            if (link == null)
+            if (employee == null)
             {
                 ViewBag.Error = "Ссылка не найдена или недействительна";
-                return View();
+                return View("Error");
             }
 
-            if (link.IsUsed)
+            if (employee.IsUsed)
             {
                 ViewBag.Error = "Эта ссылка уже была использована";
                 return View();
             }
 
-            if (link.ExpiresAt < DateTime.UtcNow)
+            if (employee.ExpiresAt < DateTime.UtcNow)
             {
                 ViewBag.Error = "Срок действия ссылки истек";
                 return View();
             }
 
-            link.IsUsed = true;
-            link.UsedAt = DateTime.UtcNow;
-            await _context.SaveChangesAsync();
+            ViewBag.FullName = employee.FullName;
+            ViewBag.Email = employee.EmployeeEmail;
+            ViewBag.CreatedAt = employee.CreatedAt.ToString("dd.MM.yyyy HH:mm");
+            ViewBag.ExpiresAt = employee.ExpiresAt.ToString("dd.MM.yyyy HH:mm");
+            ViewBag.Token = token;
 
-            ViewBag.Success = true;
-            ViewBag.FullName = link.FullName;
-            ViewBag.Email = link.EmployeeEmail;
-            ViewBag.CreatedAt = link.CreatedAt.ToString("dd.MM.yyyy HH:mm");
-            ViewBag.ExpiresAt = link.ExpiresAt.ToString("dd.MM.yyyy HH:mm");
+            return View();
+        }
 
-            return View("Welcome");
+        [HttpGet]
+        public IActionResult Error(string message)
+        {
+            ViewBag.Message = message;
+            return View();
         }
     }
 }

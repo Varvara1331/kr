@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Добро пожаловать";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4>Доступ предоставлен</h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <h2>Здравствуйте, @ViewBag.FullName!</h2>
+                        <p class="lead">Вы успешно вошли в систему</p>
+                    </div>
+
+                    <div class="alert alert-success">
+                        <h5>📧 Ваш email: @ViewBag.Email</h5>
+                        <hr>
+                        <p><strong>Время входа:</strong> @DateTime.Now.ToString("dd.MM.yyyy HH:mm")</p>
+                        <p><strong>Ссылка создана:</strong> @ViewBag.CreatedAt (UTC)</p>
+                        <p><strong>Истекала:</strong> @ViewBag.ExpiresAt (UTC)</p>
+                    </div>
+
+                    <div class="mt-4">
+                        <p>Теперь вы можете использовать систему. Ссылка больше недействительна.</p>
+                        <a href="/" class="btn btn-primary">На главную</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

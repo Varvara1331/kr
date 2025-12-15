@@ -40,19 +40,19 @@ namespace demo.Controllers
             if (employee == null)
             {
                 ViewBag.Error = "Ссылка не найдена или недействительна";
-                return View("Error");
+                return View("Index");
             }
 
             if (employee.IsUsed)
             {
                 ViewBag.Error = "Эта ссылка уже была использована";
-                return View();
+                return View("Index");
             }
 
             if (employee.ExpiresAt < DateTime.UtcNow)
             {
                 ViewBag.Error = "Срок действия ссылки истек";
-                return View();
+                return View("Index");
             }
 
             ViewBag.FullName = employee.FullName;
@@ -61,6 +61,10 @@ namespace demo.Controllers
             ViewBag.ExpiresAt = employee.ExpiresAt.ToString("dd.MM.yyyy HH:mm");
             ViewBag.Token = token;
 
+            employee.IsUsed = true;
+            employee.UsedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
             return View();
         }
 
@@ -68,7 +72,7 @@ namespace demo.Controllers
         public IActionResult Error(string message)
         {
             ViewBag.Message = message;
-            return View();
+            return View("Index");
         }
     }
 }

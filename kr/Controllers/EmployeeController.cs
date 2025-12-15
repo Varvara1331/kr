@@ -23,21 +23,6 @@ namespace demo.Controllers
             var employee = await _context.TemporaryLinks
                 .FirstOrDefaultAsync(e => e.Token == token);
 
-            if (employee == null)
-            {
-                return Content("Ошибка: неверная ссылка");
-            }
-
-            if (employee.IsUsed)
-            {
-                return Content("Эта ссылка уже использована");
-            }
-
-            if (employee.ExpiresAt < DateTime.UtcNow)
-            {
-                return Content("Срок действия ссылки истек");
-            }
-
             var viewModel = new EmployeeSignatureViewModel
             {
                 FullName = employee.FullName,

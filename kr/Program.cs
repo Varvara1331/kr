@@ -36,4 +36,14 @@ app.MapControllerRoute(
     pattern: "admin/createlink",
     defaults: new { controller = "Admin", action = "CreateLink" });
 
+app.MapControllerRoute(
+    name: "employee-signature",
+    pattern: "employee/signature",
+    defaults: new { controller = "Employee", action = "Signature" });
+
+app.MapControllerRoute(
+    name: "employee-download",
+    pattern: "employee/download",
+    defaults: new { controller = "Employee", action = "Download" });
+
 app.Run();

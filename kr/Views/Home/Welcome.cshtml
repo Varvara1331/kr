@@ -16,7 +16,7 @@
                     </div>
 
                     <div class="alert alert-success">
-                        <h5>📧 Ваш email: @ViewBag.Email</h5>
+                        <h5>Ваш email: @ViewBag.Email</h5>
                         <hr>
                         <p><strong>Время входа:</strong> @DateTime.Now.ToString("dd.MM.yyyy HH:mm")</p>
                         <p><strong>Ссылка создана:</strong> @ViewBag.CreatedAt (UTC)</p>
@@ -26,6 +26,12 @@
                     <div class="mt-4">
                         <p>Теперь вы можете использовать систему. Ссылка больше недействительна.</p>
                         <a href="/" class="btn btn-primary">На главную</a>
+                    </div>
+
+                    <div class="mb-4">
+                        <a href="/employee/signature?token=@ViewBag.Token" class="btn btn-primary btn-lg">
+                            <i class="bi bi-pen"></i> Создать email подпись
+                        </a>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,160 @@
+﻿@model List<demo.ViewModels.AddressBookViewModel>
+@{
+    ViewData["Title"] = "Адресная книга";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1>@ViewData["Title"]</h1>
+            <p class="text-muted">Список сотрудников с их контактными данными</p>
+        </div>
+        <div class="col-auto">
+            <a asp-action="Export" class="btn btn-outline-primary">
+                <i class="bi bi-download"></i> Экспорт в CSV
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover" id="addressBookTable">
+                        <thead>
+                            <tr>
+                                <th>ФИО</th>
+                                <th>Email</th>
+                                <th>Должность</th>
+                                <th>Телефон</th>
+                                <th>Внутренний номер</th>
+                                <th>Визитная карточка</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var employee in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@employee.FullName</strong>
+                                    </td>
+                                    <td>
+                                        <a href="mailto:@employee.Email" class="text-decoration-none">
+                                            @employee.Email
+                                        </a>
+                                    </td>
+                                    <td>@employee.Position</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(employee.Phone))
+                                        {
+                                            <a href="tel:@employee.Phone" class="text-decoration-none">
+                                                @employee.Phone
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Не указан</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(employee.InternalNumber))
+                                        {
+                                            <span class="badge bg-primary">@employee.InternalNumber</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Не указан</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(employee.Phone) || !string.IsNullOrEmpty(employee.Email))
+                                        {
+                                            <a href="@employee.VCardUrl"
+                                               class="btn btn-sm btn-outline-success"
+                                               title="Скачать визитную карточку (vCard)"
+                                               download>
+                                                <i class="bi bi-person-vcard"></i> vCard
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted small">Нет контактов</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert alert-info alert-dismissible fade show mt-3">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <strong>Визитные карточки vCard:</strong> Формат .vcf совместим с большинством почтовых клиентов и адресных книг (Outlook, Apple Contacts, Google Contacts и др.)
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-person-x display-1 text-muted"></i>
+                    <h4 class="mt-3">Список сотрудников пуст</h4>
+                    <p class="text-muted">Нет зарегистрированных сотрудников с контактными данными</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+
+        .badge {
+            font-size: 0.85em;
+            padding: 0.35em 0.65em;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Добавляем поле поиска
+            const searchInput = document.createElement('input');
+            searchInput.type = 'text';
+            searchInput.className = 'form-control mb-3';
+            searchInput.placeholder = 'Поиск по всем полям...';
+
+            const tableContainer = document.querySelector('.table-responsive');
+            if (tableContainer) {
+                tableContainer.parentNode.insertBefore(searchInput, tableContainer);
+
+                const tableRows = document.querySelectorAll('#addressBookTable tbody tr');
+
+                // Функция поиска
+                searchInput.addEventListener('keyup', function () {
+                    const searchTerm = this.value.toLowerCase();
+
+                    tableRows.forEach(row => {
+                        const rowText = row.textContent.toLowerCase();
+                        row.style.display = rowText.includes(searchTerm) ? '' : 'none';
+                    });
+                });
+            }
+        });
+    </script>
+}

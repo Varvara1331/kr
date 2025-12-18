@@ -2,76 +2,113 @@
 @model EmployeeSignatureViewModel
 @{
     ViewData["Title"] = "Создание подписи";
+    ViewData["PageDescription"] = "Настройка персональной email подписи";
+    Layout = "_Layout";
 }
 
-<div class="container mt-5">
+<div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h4>Создание email подписи</h4>
+        <div class="col-lg-8">
+            <div class="card fade-in">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="bi bi-pen me-2"></i>Создание email подписи
+                    </h4>
                 </div>
                 <div class="card-body">
                     <div class="alert alert-info mb-4">
-                        <h5>Ваши данные:</h5>
-                        <p><strong>ФИО:</strong> @Model.FullName</p>
-                        <p><strong>Email:</strong> @Model.Email</p>
+                        <h5 class="alert-heading">
+                            <i class="bi bi-person-badge me-2"></i>Ваши данные
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-1">
+                                    <strong>ФИО:</strong> @Model.FullName
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-0">
+                                    <strong>Email:</strong> @Model.Email
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     @if (Model.IsSuccess || ViewBag.Success != null && ViewBag.Success == true)
                     {
-                        <div class="alert alert-success">
-                            <h5>✅ Подпись создана!</h5>
-                            <p>Нажмите кнопку ниже, чтобы скачать HTML файл с вашей подписью.</p>
+                        <div class="alert alert-success fade-in">
+                            <div class="text-center">
+                                <i class="bi bi-check-circle display-1 text-success mb-3"></i>
+                                <h5 class="alert-heading mb-3">✅ Подпись создана!</h5>
+                                <p class="mb-4">Нажмите кнопку ниже, чтобы скачать HTML файл с вашей подписью.</p>
 
-                            <div class="text-center mt-3">
-                                <a href="/employee/download?token=@Model.Token" class="btn btn-success btn-lg">
-                                    <i class="bi bi-download"></i> Скачать подпись
-                                </a>
+                                <div class="d-grid gap-3 d-md-block">
+                                    <a href="/employee/download?token=@Model.Token" class="btn btn-success btn-lg">
+                                        <i class="bi bi-download me-2"></i>Скачать подпись
+                                    </a>
+                                    <a href="/" class="btn btn-outline-secondary ms-md-2">
+                                        <i class="bi bi-house me-1"></i>На главную
+                                    </a>
+                                </div>
+
+                                <div class="mt-4 small text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Файл готов к использованию в почтовых клиентах
+                                </div>
                             </div>
                         </div>
                     }
                     else
                     {
-                        <form id="signature-form" action="/employee/signature" method="post">
-                            <input type="hidden" name="__RequestVerificationToken"
-                                   value="@Html.AntiForgeryToken()" />
+                        <form id="signature-form" action="/employee/signature" method="post" class="needs-validation" novalidate>
+                            @Html.AntiForgeryToken()
 
                             <input type="hidden" name="Token" value="@Model.Token" />
                             <input type="hidden" name="FullName" value="@Model.FullName" />
                             <input type="hidden" name="Email" value="@Model.Email" />
 
                             <div class="mb-3">
-                                <label for="Position" class="form-label">Должность *</label>
+                                <label for="Position" class="form-label">
+                                    <i class="bi bi-briefcase me-1"></i>Должность *
+                                </label>
                                 <input type="text"
                                        class="form-control"
                                        id="Position"
                                        name="Position"
                                        placeholder="Введите вашу должность"
                                        required />
+                                <div class="invalid-feedback">
+                                    Пожалуйста, укажите вашу должность.
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="InternalNumber" class="form-label">Внутренний номер</label>
-                                <input type="text"
-                                       class="form-control"
-                                       id="InternalNumber"
-                                       name="InternalNumber"
-                                       placeholder="Например: 123" />
-                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="InternalNumber" class="form-label">
+                                        <i class="bi bi-telephone-inbound me-1"></i>Внутренний номер
+                                    </label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="InternalNumber"
+                                           name="InternalNumber"
+                                           placeholder="Например: 123" />
+                                </div>
 
-                            <div class="mb-3">
-                                <label for="Phone" class="form-label">Мобильный телефон</label>
-                                <input type="text"
-                                       class="form-control"
-                                       id="Phone"
-                                       name="Phone"
-                                       placeholder="Например: +7 (XXX) XXX-XX-XX" />
+                                <div class="col-md-6 mb-3">
+                                    <label for="Phone" class="form-label">
+                                        <i class="bi bi-phone me-1"></i>Мобильный телефон
+                                    </label>
+                                    <input type="tel"
+                                           class="form-control"
+                                           id="Phone"
+                                           name="Phone"
+                                           placeholder="Например: +7 (XXX) XXX-XX-XX" />
+                                </div>
                             </div>
 
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="bi bi-gear"></i> Создать подпись
+                                <button type="submit" class="btn btn-primary btn-lg py-2">
+                                    <i class="bi bi-gear me-2"></i>Создать подпись
                                 </button>
                             </div>
                         </form>
@@ -84,36 +121,54 @@
 
 @section Scripts {
     <script>
-        document.getElementById('Phone')?.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 0) {
-                if (value.length <= 3) {
-                    e.target.value = '+7 (' + value;
-                } else if (value.length <= 6) {
-                    e.target.value = '+7 (' + value.substring(0, 3) + ') ' + value.substring(3);
-                } else if (value.length <= 8) {
-                    e.target.value = '+7 (' + value.substring(0, 3) + ') ' + value.substring(3, 6) + '-' + value.substring(6);
-                } else {
-                    e.target.value = '+7 (' + value.substring(0, 3) + ') ' + value.substring(3, 6) + '-' + value.substring(6, 8) + '-' + value.substring(8, 10);
+        document.addEventListener('DOMContentLoaded', function() {
+            const phoneInput = document.getElementById('Phone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length > 0) {
+                        if (value.length <= 3) {
+                            e.target.value = '+7 (' + value;
+                        } else if (value.length <= 6) {
+                            e.target.value = '+7 (' + value.substring(0, 3) + ') ' + value.substring(3);
+                        } else if (value.length <= 8) {
+                            e.target.value = '+7 (' + value.substring(0, 3) + ') ' + value.substring(3, 6) + '-' + value.substring(6);
+                        } else {
+                            e.target.value = '+7 (' + value.substring(0, 3) + ') ' + value.substring(3, 6) + '-' +
+                                            value.substring(6, 8) + '-' + value.substring(8, 10);
+                        }
+                    }
+                });
+            }
+
+            // Валидация формы
+            const form = document.getElementById('signature-form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    const position = document.getElementById('Position');
+                    if (!position.value.trim()) {
+                        e.preventDefault();
+                        position.classList.add('is-invalid');
+                        position.focus();
+                        return false;
+                    }
+
+                    console.log('=== Форма отправляется ===');
+                    console.log('Position:', document.getElementById('Position').value);
+                    console.log('Phone:', document.getElementById('Phone')?.value);
+                    console.log('InternalNumber:', document.getElementById('InternalNumber')?.value);
+                    console.log('Token:', document.querySelector('[name="Token"]').value);
+
+                    return true;
+                });
+
+                const positionInput = document.getElementById('Position');
+                if (positionInput) {
+                    positionInput.addEventListener('input', function() {
+                        this.classList.remove('is-invalid');
+                    });
                 }
             }
-        });
-
-        document.getElementById('signature-form')?.addEventListener('submit', function(e) {
-            console.log('=== Форма отправляется ===');
-            console.log('Position:', document.getElementById('Position').value);
-            console.log('Phone:', document.getElementById('Phone').value);
-            console.log('InternalNumber:', document.getElementById('InternalNumber').value);
-            console.log('Token:', document.querySelector('[name="Token"]').value);
-
-            const position = document.getElementById('Position');
-            if (!position.value.trim()) {
-                e.preventDefault();
-                alert('Пожалуйста, заполните поле "Должность"');
-                position.focus();
-                return false;
-            }
-            return true;
         });
     </script>
 }

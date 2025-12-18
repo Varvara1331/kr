@@ -1,37 +1,74 @@
 ﻿@{
     ViewData["Title"] = "Добро пожаловать";
+    ViewData["ShowPageHeader"] = false;
+    Layout = "_Layout";
 }
 
-<div class="container mt-5">
+<div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
+        <div class="col-lg-8">
+            <div class="card fade-in">
                 <div class="card-header bg-success text-white">
-                    <h4>Доступ предоставлен</h4>
+                    <h4 class="mb-0">
+                        <i class="bi bi-door-open me-2"></i>Доступ предоставлен
+                    </h4>
                 </div>
                 <div class="card-body text-center">
                     <div class="mb-4">
+                        <i class="bi bi-check-circle display-1 text-success mb-3"></i>
                         <h2>Здравствуйте, @ViewBag.FullName!</h2>
-                        <p class="lead">Вы успешно вошли в систему</p>
+                        <p class="lead text-muted">Вы успешно вошли в систему</p>
                     </div>
 
-                    <div class="alert alert-success">
-                        <h5>Ваш email: @ViewBag.Email</h5>
+                    <div class="alert alert-info text-start mx-auto" style="max-width: 500px;">
+                        <h5 class="alert-heading">
+                            <i class="bi bi-person-circle me-2"></i>Ваши данные
+                        </h5>
                         <hr>
-                        <p><strong>Время входа:</strong> @DateTime.Now.ToString("dd.MM.yyyy HH:mm")</p>
-                        <p><strong>Ссылка создана:</strong> @ViewBag.CreatedAt (UTC)</p>
-                        <p><strong>Истекала:</strong> @ViewBag.ExpiresAt (UTC)</p>
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <strong>Email:</strong>
+                                <div class="text-primary">@ViewBag.Email</div>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong>
+                                    <i class="bi bi-clock-history me-1"></i>Время входа:
+                                </strong>
+                                <div>@DateTime.Now.ToString("dd.MM.yyyy HH:mm")</div>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong>
+                                    <i class="bi bi-calendar-plus me-1"></i>Ссылка создана:
+                                </strong>
+                                <div>@ViewBag.CreatedAt (UTC)</div>
+                            </div>
+                            <div class="col-12">
+                                <strong>
+                                    <i class="bi bi-calendar-x me-1"></i>Истекала:
+                                </strong>
+                                <div>@ViewBag.ExpiresAt (UTC)</div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="mt-4">
-                        <p>Теперь вы можете использовать систему. Ссылка больше недействительна.</p>
-                        <a href="/" class="btn btn-primary">На главную</a>
-                    </div>
+                    <div class="mt-4 mb-4">
+                        <p class="mb-3">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Теперь вы можете использовать систему. Эта ссылка больше недействительна.
+                        </p>
 
-                    <div class="mb-4">
-                        <a href="/employee/signature?token=@ViewBag.Token" class="btn btn-primary btn-lg">
-                            <i class="bi bi-pen"></i> Создать email подпись
-                        </a>
+                        <div class="d-grid gap-2 d-md-block">
+                            <a href="/" class="btn btn-outline-primary me-md-2">
+                                <i class="bi bi-house me-1"></i>На главную
+                            </a>
+
+                            @if (ViewBag.Token != null)
+                            {
+                                <a href="/employee/signature?token=@ViewBag.Token" class="btn btn-primary">
+                                    <i class="bi bi-pen me-1"></i>Создать email подпись
+                                </a>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>

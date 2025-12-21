@@ -30,11 +30,17 @@
                                 <strong>Email:</strong>
                                 <div class="text-primary">@ViewBag.Email</div>
                             </div>
+                            <div class="col-12 mb-2">
+                                <strong>Пароль:</strong>
+                                <div class="text-primary d-flex align-items-center">
+                                    <code id="passwordText">@ViewBag.Password</code>
+                                </div>
+                            </div>
                             <div class="col-md-6 mb-2">
                                 <strong>
                                     <i class="bi bi-clock-history me-1"></i>Время входа:
                                 </strong>
-                                <div>@DateTime.Now.ToString("dd.MM.yyyy HH:mm")</div>
+                                <div>@DateTime.UtcNow.ToString("dd.MM.yyyy HH:mm")</div>
                             </div>
                             <div class="col-md-6 mb-2">
                                 <strong>
@@ -65,7 +71,7 @@
                             @if (ViewBag.Token != null)
                             {
                                 <a href="/employee/signature?token=@ViewBag.Token" class="btn btn-primary">
-                                    <i class="bi bi-pen me-1"></i>Создать email подпись
+                                    <i class="bi bi-pen me-1"></i>Создать HTML-подпись
                                 </a>
                             }
                         </div>

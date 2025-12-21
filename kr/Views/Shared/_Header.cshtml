@@ -2,7 +2,7 @@
     <div class="container">
         <a class="navbar-brand fw-bold" href="/">
             <i class="bi bi-link-45deg me-2 text-primary"></i>
-            <span class="d-none d-md-inline">Генератор временных ссылок</span>
+            <span class="d-none d-md-inline">Корпоративный портал</span>
             <span class="d-inline d-md-none">Временные ссылки</span>
         </a>
 
@@ -28,6 +28,12 @@
                     <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "AddressBook" ? "active" : "")"
                        href="/addressbook">
                         <i class="bi bi-people me-1"></i>Адресная книга
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "VpnConfig" ? "active" : "")"
+                       href="/vpnconfig">
+                        <i class="bi bi-shield-lock me-1"></i>VPN конфигурации
                     </a>
                 </li>
             </ul>

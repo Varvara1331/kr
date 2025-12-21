@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using demo.Data;
 
@@ -10,9 +11,11 @@ using demo.Data;
 namespace demo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251218165609_AddVpnConfigurations")]
+    partial class AddVpnConfigurations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.11");
@@ -44,10 +47,6 @@ namespace demo.Migrations
                     b.Property<bool>("IsUsed")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -68,82 +67,59 @@ namespace demo.Migrations
                     b.HasIndex("EmployeeEmail")
                         .IsUnique();
 
-                    b.HasIndex("Password")
-                        .IsUnique();
-
                     b.HasIndex("Token")
                         .IsUnique();
 
                     b.ToTable("TemporaryLinks");
                 });
 
-            modelBuilder.Entity("demo.Models.VpnConfig", b =>
+            modelBuilder.Entity("demo.Models.VpnConfiguration", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AdditionalOptions")
+                    b.Property<string>("CertificateAuthority")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Auth")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("BlockDns")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("CaCertificate")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Cipher")
-                        .IsRequired()
+                        .HasMaxLength(5000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ClientCertificate")
                         .IsRequired()
+                        .HasMaxLength(5000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ClientKey")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ConfigContent")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ConfigType")
-                        .IsRequired()
+                        .HasMaxLength(5000)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("datetime('now')");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasMaxLength(1000)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("DhParameters")
+                    b.Property<string>("DnsServers")
                         .IsRequired()
+                        .HasMaxLength(1000)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsDefault")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Mtu")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Protocol")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("RedirectGateway")
@@ -151,27 +127,24 @@ namespace demo.Migrations
 
                     b.Property<string>("ServerAddress")
                         .IsRequired()
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ServerPort")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("TlsAuthKey")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.Property<bool>("UseCompression")
+                        .HasColumnType("INTEGER");
 
-                    b.HasIndex("IsDefault")
-                        .HasFilter("IsDefault = 1");
+                    b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("VpnConfigs");
+                    b.ToTable("VpnConfigurations");
                 });
 #pragma warning restore 612, 618
         }

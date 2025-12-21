@@ -119,27 +119,30 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js"></script>
+
 @section Scripts {
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const phoneInput = document.getElementById('Phone');
-            if (phoneInput) {
-                phoneInput.addEventListener('input', function(e) {
-                    let value = e.target.value.replace(/\D/g, '');
-                    if (value.length > 0) {
-                        if (value.length <= 3) {
-                            e.target.value = '+7 (' + value;
-                        } else if (value.length <= 6) {
-                            e.target.value = '+7 (' + value.substring(0, 3) + ') ' + value.substring(3);
-                        } else if (value.length <= 8) {
-                            e.target.value = '+7 (' + value.substring(0, 3) + ') ' + value.substring(3, 6) + '-' + value.substring(6);
-                        } else {
-                            e.target.value = '+7 (' + value.substring(0, 3) + ') ' + value.substring(3, 6) + '-' +
-                                            value.substring(6, 8) + '-' + value.substring(8, 10);
-                        }
+              document.addEventListener('DOMContentLoaded', function() {
+        if ($('#Phone').length) {
+            $('#Phone').inputmask({
+                mask: '+7 (999) 999-99-99',
+                placeholder: '_',
+                clearIncomplete: true,
+                showMaskOnHover: true,
+                onBeforePaste: function(pastedValue) {
+                    const cleaned = pastedValue.replace(/\D/g, '');
+                    if (cleaned.startsWith('8')) {
+                        return '7' + cleaned.substring(1);
                     }
-                });
-            }
+                    if (cleaned.length === 10) {
+                        return '7' + cleaned;
+                    }
+                    return cleaned;
+                }
+            });
+        }
 
             // Валидация формы
             const form = document.getElementById('signature-form');

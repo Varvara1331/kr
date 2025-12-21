@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using demo.Data;
 using demo.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace demo.Controllers
 {
@@ -26,9 +27,9 @@ namespace demo.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateLink(string employeeEmail, string fullName, int durationMinutes)
+        public async Task<IActionResult> CreateLink(string employeeEmail, string fullName, string password, int durationMinutes)
         {
-            if (string.IsNullOrEmpty(employeeEmail) || string.IsNullOrEmpty(fullName) || durationMinutes <= 0)
+            if (string.IsNullOrEmpty(employeeEmail) || string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(password) || durationMinutes <= 0)
             {
                 ViewBag.Error = "Все поля обязательны для заполнения";
                 return View("Index");
@@ -49,12 +50,18 @@ namespace demo.Controllers
             {
                 existingEmployee.Token = token;
                 existingEmployee.ExpiresAt = expiresAt;
+                existingEmployee.CreatedAt = DateTime.UtcNow;
                 existingEmployee.IsUsed = false;
                 existingEmployee.UsedAt = null;
 
                 if (existingEmployee.FullName != fullName)
                 {
                     existingEmployee.FullName = fullName;
+                }
+
+                if (existingEmployee.Password != password)
+                {
+                    existingEmployee.Password = password;
                 }
 
                 _context.TemporaryLinks.Update(existingEmployee);
@@ -67,6 +74,7 @@ namespace demo.Controllers
                     Token = token,
                     EmployeeEmail = employeeEmail,
                     FullName = fullName,
+                    Password = password,
                     Phone = string.Empty,
                     InternalNumber = string.Empty,
                     Position = string.Empty,
@@ -88,6 +96,7 @@ namespace demo.Controllers
             ViewBag.Token = token;
             ViewBag.EmployeeEmail = employeeEmail;
             ViewBag.FullName = fullName;
+            ViewBag.Password = password;
             ViewBag.ExpiresAt = expiresAt.ToString("dd.MM.yyyy HH:mm");
             ViewBag.IsUpdated = existingEmployee != null;
             ViewBag.Success = true;

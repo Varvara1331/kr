@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using demo.Data;
 
@@ -10,9 +11,11 @@ using demo.Data;
 namespace demo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251218171956_AddVpnConfigsTable")]
+    partial class AddVpnConfigsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.11");
@@ -44,10 +47,6 @@ namespace demo.Migrations
                     b.Property<bool>("IsUsed")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -66,9 +65,6 @@ namespace demo.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeeEmail")
-                        .IsUnique();
-
-                    b.HasIndex("Password")
                         .IsUnique();
 
                     b.HasIndex("Token")

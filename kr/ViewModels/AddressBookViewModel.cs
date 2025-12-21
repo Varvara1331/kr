@@ -13,7 +13,6 @@ namespace demo.ViewModels
         public DateTime? UsedAt { get; set; }
         public bool HasSignature { get; set; }
 
-        // URL для скачивания vCard
         public string VCardUrl => $"/addressbook/vcard/{Id}";
     }
 }

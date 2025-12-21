@@ -131,31 +131,34 @@ namespace demo.Controllers
     <title>Email подпись - {employee.FullName}</title>
 </head>
 <body>
-    <div style=""font-family: Arial, sans-serif; font-size: 12px; color: #333;"">
+    <div style=""font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px; color: #333;"">
         <br>
         <p style=""margin: 10px 0;"">
             С уважением,<br>
             <strong style=""font-size: 14px;"">{employee.FullName}</strong><br>
-            <span style=""color: #555;"">{employee.Position}</span>
+            <span color: #515151;"">{employee.Position}</span>
         </p>
-        
-        <div style=""border-left: 3px solid #007bff; padding-left: 10px; margin: 15px 0;"">
+        <img src=""http://localhost:5138//images/kr-logo.png""
+            alt=""KR Automation""/>
+        <div style=""border-left: 3px solid #ec5c2a; padding-left: 10px; margin: 15px 0;"">
             <p style=""margin: 5px 0;"">
-                <strong>Email:</strong> <a href=""mailto:{employee.EmployeeEmail}"" style=""color: #007bff; text-decoration: none;"">{employee.EmployeeEmail}</a>
+                <strong>Email:</strong> <a href=""mailto:{employee.EmployeeEmail}"" style=""color: #ec5c2a; text-decoration: none;"">{employee.EmployeeEmail}</a>
             </p>
             
             {phoneHtml}
             {internalNumberHtml}
         </div>
         
-        <div style=""margin-top: 20px; padding-top: 10px; border-top: 1px solid #eee; font-size: 11px; color: #777;"">
+        <div>
+            <p style=""color: #ec5c2a; margin-bottom: 0;"">КР Автоматизация</p> 
+            <p style=""margin: 0;"">600033, г. Владимир | ул. Мостостроевская, д. 18</p>
             <p style=""margin: 0;"">
-                КР Автоматизация<br>
-                600033, г. Владимир | ул. Мостостроевская, д. 18<br>
-                +7 4922 37 24 80 | +7 4922 37 24 81<br>
-                <a href=""http://kr-drive.ru/"" style=""color: #777; text-decoration: none;"">kr-drive.ru</a>
+                +7 4922 37 24 80 | +7 4922 37 24 81
+            </p>
+                <a style=""color: #515151"" href=""http://kr-drive.ru/"">kr-drive.ru</a>
             </p>
         </div>
+        <img src=""http://localhost:5138//images/line.png"">
     </div>
 </body>
 </html>";

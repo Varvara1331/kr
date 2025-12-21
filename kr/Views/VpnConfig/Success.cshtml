@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Конфигурация создана";
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-check-circle me-2"></i>Успешно!
+                    </h4>
+                </div>
+                <div class="card-body text-center">
+
+                    @if (ViewBag.Success != null)
+                    {
+                        <div class="mb-4">
+                            <i class="bi bi-check-circle display-1 text-success mb-3"></i>
+                            <h3>@ViewBag.Success</h3>
+                        </div>
+                    }
+
+                    <div class="alert alert-info text-start">
+                        <h5 class="alert-heading">
+                            <i class="bi bi-info-circle me-2"></i>Доступные действия:
+                        </h5>
+                        <ul class="mb-0">
+                            <li>Просмотреть все конфигурации</li>
+                            <li>Скачать .conf файл</li>
+                            <li>Создать новую конфигурацию</li>
+                        </ul>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-block mt-4">
+                        <a href="/vpnconfig/list" class="btn btn-primary me-md-2">
+                            <i class="bi bi-list me-1"></i>Все конфигурации
+                        </a>
+
+                        @if (ViewBag.ConfigId != null)
+                        {
+                            <a href="/vpnconfig/download/@ViewBag.ConfigId" class="btn btn-success me-md-2">
+                                <i class="bi bi-download me-1"></i>Скачать файл
+                            </a>
+                        }
+
+                        <a href="/vpnconfig/create" class="btn btn-outline-primary">
+                            <i class="bi bi-plus-circle me-1"></i>Новая конфигурация
+                        </a>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="/vpnconfig" class="btn btn-outline-secondary">
+                            <i class="bi bi-house me-1"></i>На главную VPN
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

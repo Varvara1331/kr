@@ -10,7 +10,6 @@ using demo.ViewModels;
 
 namespace demo.Controllers
 {
-    // УБЕРИТЕ этот атрибут: [Authorize]
     public class AddressBookController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -73,7 +72,6 @@ namespace demo.Controllers
         }
 
         [HttpGet]
-        // УБЕРИТЕ этот атрибут: [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Export()
         {
             var employees = await _context.TemporaryLinks
@@ -108,34 +106,27 @@ namespace demo.Controllers
                 return NotFound();
             }
 
-            // Создаем vCard вручную в формате vCard 3.0
             var vcardBuilder = new StringBuilder();
 
             vcardBuilder.AppendLine("BEGIN:VCARD");
             vcardBuilder.AppendLine("VERSION:3.0");
 
-            // Обрабатываем ФИО
             var nameParts = employee.FullName?.Split(' ', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
             var lastName = nameParts.Length > 0 ? nameParts[0] : "";
             var firstName = nameParts.Length > 1 ? nameParts[1] : "";
             var middleName = nameParts.Length > 2 ? string.Join(" ", nameParts.Skip(2)) : "";
 
-            // Формат N:Фамилия;Имя;Отчество;Префикс;Суффикс
             vcardBuilder.AppendLine($"N:{EscapeVCardValue(lastName)};{EscapeVCardValue(firstName)};{EscapeVCardValue(middleName)};;");
 
-            // Полное имя
             vcardBuilder.AppendLine($"FN:{EscapeVCardValue(employee.FullName)}");
 
-            // Email
             if (!string.IsNullOrEmpty(employee.EmployeeEmail))
             {
                 vcardBuilder.AppendLine($"EMAIL;TYPE=WORK,INTERNET:{EscapeVCardValue(employee.EmployeeEmail)}");
             }
 
-            // Телефон
             if (!string.IsNullOrEmpty(employee.Phone))
             {
-                // Очищаем телефон от нецифровых символов (кроме + в начале)
                 var cleanPhone = employee.Phone;
                 if (!cleanPhone.StartsWith("+"))
                 {
@@ -144,46 +135,37 @@ namespace demo.Controllers
                 vcardBuilder.AppendLine($"TEL;TYPE=WORK,VOICE:{EscapeVCardValue(cleanPhone)}");
             }
 
-            // Должность
             if (!string.IsNullOrEmpty(employee.Position))
             {
                 vcardBuilder.AppendLine($"TITLE:{EscapeVCardValue(employee.Position)}");
             }
 
-            // Организация (можно настроить или сделать конфигурируемой)
             vcardBuilder.AppendLine($"ORG:{EscapeVCardValue("Ваша организация")};");
 
-            // Внутренний номер в заметках
             if (!string.IsNullOrEmpty(employee.InternalNumber))
             {
                 vcardBuilder.AppendLine($"NOTE:{EscapeVCardValue($"Внутренний номер: {employee.InternalNumber}")}");
             }
 
-            // Дата и время создания карточки
             vcardBuilder.AppendLine($"REV:{DateTime.Now:yyyyMMddTHHmmssZ}");
 
-            // Уникальный идентификатор
             vcardBuilder.AppendLine($"UID:employee-{employee.Id}-{Guid.NewGuid()}");
 
             vcardBuilder.AppendLine("END:VCARD");
 
-            // Конвертируем в байты
             var vcardContent = vcardBuilder.ToString();
             var bytes = Encoding.UTF8.GetBytes(vcardContent);
 
-            // Формируем имя файла
             var fileName = $"{SanitizeFileName(employee.FullName)}.vcf";
 
             return File(bytes, "text/vcard", fileName);
         }
 
-        // Вспомогательный метод для экранирования специальных символов в vCard
         private string EscapeVCardValue(string value)
         {
             if (string.IsNullOrEmpty(value))
                 return "";
 
-            // Экранируем специальные символы в vCard
             return value
                 .Replace("\\", "\\\\")
                 .Replace(";", "\\;")
@@ -192,7 +174,6 @@ namespace demo.Controllers
                 .Replace("\r", "");
         }
 
-        // Вспомогательный метод для очистки имени файла
         private string SanitizeFileName(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))

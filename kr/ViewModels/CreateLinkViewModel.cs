@@ -14,6 +14,11 @@ namespace TempLinkApp.ViewModels
         [StringLength(100, ErrorMessage = "ФИО не должно превышать 100 символов")]
         public string FullName { get; set; }
 
+        [Required(ErrorMessage = "Пароль обязателен")]
+        [Display(Name = "Пароль сотрудника")]
+        [StringLength(10, ErrorMessage = "Пароль не должен превышать 10 символов")]
+        public string Password { get; set; }
+
         [Required(ErrorMessage = "Длительность обязательна")]
         [Range(1, 1440, ErrorMessage = "Длительность должна быть от 1 до 1440 минут")]
         [Display(Name = "Длительность (в минутах)")]

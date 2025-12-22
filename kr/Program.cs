@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using demo.Data;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,35 +26,5 @@ app.UseRouting();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.MapControllerRoute(
-    name: "admin",
-    pattern: "admin",
-    defaults: new { controller = "Admin", action = "Index" });
-
-app.MapControllerRoute(
-    name: "create-link",
-    pattern: "admin/createlink",
-    defaults: new { controller = "Admin", action = "CreateLink" });
-
-app.MapControllerRoute(
-    name: "employee-signature",
-    pattern: "employee/signature",
-    defaults: new { controller = "Employee", action = "Signature" });
-
-app.MapControllerRoute(
-    name: "employee-download",
-    pattern: "employee/download",
-    defaults: new { controller = "Employee", action = "Download" });
-
-app.MapControllerRoute(
-    name: "address-book",
-    pattern: "addressbook",
-    defaults: new { controller = "AddressBook", action = "Index" });
-
-app.MapControllerRoute(
-    name: "address-book-vcard",
-    pattern: "addressbook/vcard/{id}",
-    defaults: new { controller = "AddressBook", action = "VCard" });
 
 app.Run();

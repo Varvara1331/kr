@@ -57,6 +57,7 @@ namespace demo.Controllers
 
             ViewBag.FullName = employee.FullName;
             ViewBag.Email = employee.EmployeeEmail;
+            ViewBag.Password = employee.Password;
             ViewBag.CreatedAt = employee.CreatedAt.ToString("dd.MM.yyyy HH:mm");
             ViewBag.ExpiresAt = employee.ExpiresAt.ToString("dd.MM.yyyy HH:mm");
             ViewBag.Token = token;

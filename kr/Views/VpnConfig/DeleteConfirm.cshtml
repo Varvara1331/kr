@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "Подтверждение удаления";
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Подтверждение удаления
+                    </h4>
+                </div>
+                <div class="card-body">
+
+                    <div class="alert alert-danger">
+                        <h5 class="alert-heading">Внимание!</h5>
+                        <p class="mb-0">
+                            Вы собираетесь полностью удалить VPN конфигурацию из базы данных.
+                            Это действие невозможно отменить.
+                        </p>
+                    </div>
+
+                    @if (ViewBag.Config != null)
+                    {
+                        var config = ViewBag.Config;
+
+                        <div class="mb-4">
+                            <h5>Будет удалена конфигурация:</h5>
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <dl class="row mb-0">
+                                        <dt class="col-sm-3">ID:</dt>
+                                        <dd class="col-sm-9">@config.Id</dd>
+
+                                        <dt class="col-sm-3">Название:</dt>
+                                        <dd class="col-sm-9"><strong>@config.Name</strong></dd>
+
+                                        <dt class="col-sm-3">Сервер:</dt>
+                                        <dd class="col-sm-9">@config.ServerAddress:@config.ServerPort</dd>
+
+                                        <dt class="col-sm-3">Тип:</dt>
+                                        <dd class="col-sm-9">@config.ConfigType</dd>
+
+                                        <dt class="col-sm-3">Создана:</dt>
+                                        <dd class="col-sm-9">@config.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/vpnconfig/list" class="btn btn-secondary me-md-2">
+                                <i class="bi bi-arrow-left me-1"></i>Отмена
+                            </a>
+                            <a href="/vpnconfig/deleteconfirmed/@config.Id" class="btn btn-danger">
+                                <i class="bi bi-trash me-1"></i>Да, удалить полностью
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Конфигурация не найдена
+                        </div>
+                        <a href="/vpnconfig/list" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>Вернуться к списку
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
